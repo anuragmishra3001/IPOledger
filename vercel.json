@@ -1,16 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm install && cd server && npm install && cd ../client && npm install && npm run build",
+  "framework": "vite",
+  "installCommand": "npm install --workspaces=false && npm install --prefix server && npm install --prefix client",
+  "buildCommand": "npm run build --prefix client",
   "outputDirectory": "client/dist",
-  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/server/index.js" },
-    { "source": "/((?!.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/((?!assets/|api/|.*\\..*).*)", "destination": "/index.html" }
   ],
   "functions": {
-    "server/index.js": {
+    "api/index.js": {
       "includeFiles": "server/**",
-      "runtime": "@vercel/node@3"
+      "maxDuration": 15
     }
   },
   "headers": [
@@ -19,13 +22,15 @@
       "headers": [
         { "key": "X-Frame-Options", "value": "DENY" },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "no-referrer" }
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" }
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+        { "key": "Set-Cookie-Options", "value": "httponly, secure, samesite=strict" }
       ]
     }
   ]
