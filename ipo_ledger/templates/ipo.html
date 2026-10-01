@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ ipo.name }}{% endblock %}
+{% block body %}
+<p><a href="{{ url_for('index') }}">&larr; All IPOs</a></p>
+<div class="head">
+  <h1>{{ ipo.name }}</h1>
+  <div class="grand"><span class="muted">Total with this IPO</span><strong>{{ grand|inr }}</strong></div>
+</div>
+
+<form method="post" action="{{ url_for('entry_add', ipo_id=ipo.id) }}" class="add">
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  <label>Name <input name="person" maxlength="80" required></label>
+  <label>Amounts <input name="amounts" placeholder="14852, 853, 1000" required></label>
+  <label>Note <input name="note" maxlength="200" placeholder="optional"></label>
+  <fieldset>
+    <label><input type="radio" name="category" value="friend" checked> Friend</label>
+    <label><input type="radio" name="category" value="family"> Family</label>
+  </fieldset>
+  <button class="primary">Add</button>
+</form>
+
+<form method="get" class="search">
+  <input name="q" value="{{ q }}" placeholder="Search a person in this IPO" aria-label="Search person">
+  <button>Search</button>{% if q %}<a href="{{ url_for('ipo_view', ipo_id=ipo.id) }}">Clear</a>{% endif %}
+</form>
+
+<div class="cols">
+{% for cat, label in (('friend','Friends'),('family','Family')) %}
+  <section class="col {{ cat }}">
+    <h2>{{ label }} <span class="sum">{{ cols[cat].total|inr }}</span></h2>
+    {% for p in cols[cat].people %}
+      <div class="person">
+        <div class="pname"><span>{{ p.name }}</span><strong>{{ p.total|inr }}</strong></div>
+        <ul>
+        {% for e in p.entries %}
+          <li>
+            <span>{{ e.amount|inr }}{% if e.note %} <em class="muted">{{ e.note }}</em>{% endif %}</span>
+            <form method="post" action="{{ url_for('entry_delete', entry_id=e.id) }}" data-confirm="Delete {{ e.amount|inr }} for {{ p.name }}?">
+              <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+              <button class="link" aria-label="Delete this amount">Delete</button>
+            </form>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <p class="muted">{{ 'No match.' if q else 'Nobody added yet.' }}</p>
+    {% endfor %}
+  </section>
+{% endfor %}
+</div>
+
+<form method="post" action="{{ url_for('ipo_delete', ipo_id=ipo.id) }}" data-confirm="Delete {{ ipo.name }} and every amount in it? This cannot be undone." class="danger">
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  <button class="link">Delete this IPO</button>
+</form>
+{% endblock %}

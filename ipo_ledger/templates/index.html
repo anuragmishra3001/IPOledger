@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="bar">
+  <form method="get" class="search">
+    <input name="q" value="{{ q }}" placeholder="Search IPO or person name" aria-label="Search">
+    <button>Search</button>
+    {% if q %}<a href="{{ url_for('index') }}">Clear</a>{% endif %}
+  </form>
+  <form method="post" action="{{ url_for('ipo_new') }}" class="search">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <input name="name" placeholder="New IPO name" maxlength="100" required aria-label="New IPO name">
+    <button class="primary">Create IPO</button>
+  </form>
+</div>
+
+{% if ipos %}
+<table class="ledger">
+  <thead><tr><th>IPO</th><th class="num">Friends</th><th class="num">Family</th><th class="num">Total</th></tr></thead>
+  <tbody>
+  {% for i in ipos %}
+    <tr>
+      <td><a href="{{ url_for('ipo_view', ipo_id=i.id) }}">{{ i.name }}</a></td>
+      <td class="num friend">{{ i.friend_total|inr }}</td>
+      <td class="num family">{{ i.family_total|inr }}</td>
+      <td class="num strong">{{ i.total|inr }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  <tfoot><tr><td colspan="3">All IPOs shown</td><td class="num strong">{{ grand|inr }}</td></tr></tfoot>
+</table>
+{% elif q %}
+<p class="muted">Nothing matches "{{ q }}". Try part of an IPO or person name.</p>
+{% else %}
+<p class="muted">No IPOs yet. Create your first one above.</p>
+{% endif %}
+{% endblock %}

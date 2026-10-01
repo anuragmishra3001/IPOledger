@@ -1,0 +1,23 @@
+node_modules
+client/node_modules
+server/node_modules
+.env
+.env.local
+client/dist
+client/.vite
+*.log
+.DS_Store
+
+# Local databases and state
+server/ledger.db
+server/ledger.db-shm
+server/ledger.db-wal
+ipo_ledger/ledger.db
+ipo_ledger/.secret_key
+*.sqlite
+*.sqlite3
+
+# Editor / OS
+.idea
+.vscode
+Thumbs.db
