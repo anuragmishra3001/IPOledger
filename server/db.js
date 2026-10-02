@@ -73,7 +73,17 @@ function sqliteWrap(db) {
 }
 
 function initSqlite() {
-  const Database = require("better-sqlite3");
+  let Database;
+  try {
+    Database = require("better-sqlite3");
+  } catch (err) {
+    const msg =
+      "better-sqlite3 is not available (native binding missing) AND no TiDB/MySQL " +
+      "connection env vars are set. Either install better-sqlite3 locally, or — for " +
+      "Vercel — set TIDB_HOST/TIDB_USER/TIDB_PASSWORD/TIDB_DATABASE environment variables " +
+      "(TiDB Cloud Serverless Tier works, free).";
+    throw new Error(msg + " [inner: " + err.message + "]");
+  }
   const dbFile = process.env.DB_PATH || path.join(__dirname, "ledger.db");
   const db = new Database(dbFile);
   db.pragma("journal_mode = WAL");

@@ -1,14 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "installCommand": "npm install --workspaces=false && npm install --prefix server && npm install --prefix client",
-  "buildCommand": "npm run build --prefix client",
+  "installCommand": "npm install --no-audit --no-fund && npm install --prefix server --no-audit --no-fund && npm install --prefix client --no-audit --no-fund && npm install --prefix api --no-audit --no-fund",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api" },
-    { "source": "/((?!assets/|api/|.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "/api/index.js" },
+    { "source": "/((?!assets/|.*\\.[^/]+$).*)", "destination": "/index.html" }
   ],
   "functions": {
     "api/index.js": {
@@ -29,8 +28,7 @@
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate" },
-        { "key": "Set-Cookie-Options", "value": "httponly, secure, samesite=strict" }
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate" }
       ]
     }
   ]

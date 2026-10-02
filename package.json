@@ -2,8 +2,11 @@
   "name": "ipo-ledger-mern",
   "version": "2.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "install:all": "npm install --no-audit --no-fund && npm install --prefix server --no-audit --no-fund && npm install --prefix client --no-audit --no-fund && npm install --prefix api --no-audit --no-fund",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
