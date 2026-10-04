@@ -136,11 +136,7 @@ async function initMysql() {
       connectionLimit: 10,
       queueLimit: 0,
     };
-    if (
-      TIDB_SSL === "true" ||
-      url.protocol === "mysqls:" ||
-      /tidbcloud|planetscale/.test(url.hostname)
-    ) {
+    if (TIDB_SSL === "true" || url.protocol === "mysqls:" || /tidbcloud|planetscale/.test(url.hostname)) {
       poolConfig.ssl = { rejectUnauthorized: true };
     }
   } else {
@@ -154,7 +150,9 @@ async function initMysql() {
       connectionLimit: 10,
       queueLimit: 0,
     };
-    if (TIDB_SSL === "true" && TIDB_HOST && /tidbcloud/.test(TIDB_HOST)) {
+    if (TIDB_SSL === "true") {
+      poolConfig.ssl = { rejectUnauthorized: true };
+    } else if (TIDB_HOST && /tidbcloud|planetscale/.test(TIDB_HOST)) {
       poolConfig.ssl = { rejectUnauthorized: true };
     }
   }
