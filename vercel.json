@@ -6,6 +6,13 @@
   "buildCommand": "npm install --prefix client --no-audit --no-fund && npm run --prefix client build",
   "outputDirectory": "client/dist",
 
+  "functions": {
+    "api/index.js": {
+      "runtime": "@vercel/node@latest",
+      "includeFiles": "server/**/*.js"
+    }
+  },
+
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
     { "source": "/((?!.*\\..*).*)", "destination": "/index.html" }
