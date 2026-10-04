@@ -334,9 +334,12 @@ async function boot() {
   }
 }
 
-boot().catch((err) => {
-  console.error("Failed to initialize:", err);
-  process.exit(1);
-});
+if (require.main === module) {
+  boot().catch((err) => {
+    console.error("Failed to initialize:", err);
+    process.exit(1);
+  });
+}
 
 module.exports = app;
+module.exports.boot = boot;
