@@ -11,8 +11,7 @@
       "root": "server",
       "framework": "express",
       "installCommand": "npm install --no-audit --no-fund",
-      "buildCommand": "echo 'No build needed for Express'",
-      "maxDuration": 15
+      "buildCommand": "echo 'No build needed for Express'"
     },
 
     "ipo_ledger": {
