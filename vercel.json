@@ -1,8 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
 
-  "installCommand": "npm run install:all",
-  "buildCommand": "npm run build",
+  "framework": null,
+  "installCommand": "npm install --no-audit --no-fund && npm install --prefix server --no-audit --no-fund && npm install --prefix client --no-audit --no-fund && npm install --prefix api --no-audit --no-fund",
+  "buildCommand": "npm install --prefix client --no-audit --no-fund && npm run --prefix client build",
   "outputDirectory": "client/dist",
 
   "rewrites": [
