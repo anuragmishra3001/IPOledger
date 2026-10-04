@@ -12,8 +12,10 @@ from flask import (Flask, abort, flash, g, redirect, render_template, request,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE, "ledger.db")
-KEY_PATH = os.path.join(BASE, ".secret_key")
+DATA_DIR = os.environ.get("IPO_LEDGER_DATA_DIR", "/tmp/ipo_ledger")
+os.makedirs(DATA_DIR, exist_ok=True)
+DB_PATH = os.path.join(DATA_DIR, "ledger.db")
+KEY_PATH = os.path.join(DATA_DIR, ".secret_key")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (

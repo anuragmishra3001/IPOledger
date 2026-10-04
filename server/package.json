@@ -9,14 +9,12 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "better-sqlite3": "^11.3.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
-    "ipo-ledger-mern": "file:..",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3"
   },
